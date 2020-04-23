@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
     },
     AddTask: {
-        marginLeft: "90%"
+        left: "90%",
+        marginLeft: "250px"
     }
 }));
 
@@ -25,7 +26,8 @@ const SmallAddButton = () => {
                 size="small" 
                 color="primary" 
                 aria-label="add" 
-                justifyContent="right"
+                justify="right"
+                type="submit"
                 className={classes.AddTask}
             >
                 <AddIcon />
