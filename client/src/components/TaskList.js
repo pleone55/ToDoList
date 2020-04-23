@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -23,26 +24,34 @@ const useStyles = makeStyles((theme) => ({
     title: {
         marginTop: "30px",
         marginLeft: "130px"
+    },
+    tableCell: {
+        borderBottom: "none",
+        boxShadow: "none",
+    },
+    body: {
+        "&:hover": {
+            backgroundColor: "#F0F0F0"
+        }
     }
 }));
 
-function createData(name, completed, action) {
-    return { name, completed, action };
-}
+const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
 
-const rows = [
-    createData('Wash Dishes', 'Incomplete', 'Delete'),
-    createData('Wash Dishes', 'Incomplete', 'Delete'),
-    createData('Wash Dishes', 'Incomplete', 'Delete'),
-    createData('Wash Dishes', 'Incomplete', 'Delete'),
-]
-
-const TaskList = () => {
-    const [checked, setChecked] = useState(true);
+const TaskList = props => {
+    const { id } = props;
+    const { completed } = props;
     const classes = useStyles();
 
     const handleChecked = event => {
-        setChecked(event.target.value);
+        axios.put("http://localhost:7000/api/tasks/" + id, {
+            completed
+        })
+            .then(response => console.log(response));
+    };
+
+    const handleDelete = taskId => {
+        axios.delete("http://localhost:7000/api/tasks/" + taskId)
     }
 
     return (
@@ -52,25 +61,27 @@ const TaskList = () => {
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="left">Task</TableCell>
-                            <TableCell align="center">Completed</TableCell>
-                            <TableCell align="right">Action</TableCell>
+                            {tableHead.map((head, i) => (
+                                <TableCell key={`${head}${i}`} className={classes.tableCell}>
+                                    {head.name}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
-                            <TableCell component="th" scope="row">
-                                {row.name}
+                    {props.task.map((task, i) => (
+                        <TableRow key={i} className={classes.body}>
+                            <TableCell component="th" scope="row" className={classes.tableCell}>
+                                {task.taskName}
                             </TableCell>
-                            <TableCell align="center">
+                            <TableCell className={classes.tableCell}>
                                 <Checkbox
-                                    checked={checked}
+                                    completed={completed}
                                     onChange={handleChecked}
                                     inputProps={{ 'aria-label': 'primary checkbox' }}
                                 />
                             </TableCell>
-                            <TableCell align="right"><DeleteForeverIcon/></TableCell>
+                            <TableCell className={classes.tableCell}><button onClick={() => handleDelete(task._id)}><DeleteForeverIcon/></button></TableCell>
                         </TableRow>
                     ))}
                     </TableBody>

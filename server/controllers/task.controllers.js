@@ -14,7 +14,7 @@ module.exports.getTasks = (req, res) => {
 };
 
 module.exports.updateTask = (req, res) => {
-    Task.findOne({ _id: req.params.id })
+    Task.findOne({ _id: req.params.id }, req.body, {new: true})
         .then(task => res.json(task))
         .catch(err => res.json(err));
 };
