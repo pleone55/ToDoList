@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('config');
+const jwtSecret = "$supersecret"
 
 module.exports = function(req, res, next){
     //Get token from header
@@ -12,7 +12,7 @@ module.exports = function(req, res, next){
 
     //decode user authorization with correct secret key
     try {
-        const decoded = jwt.verify(token, config.get('jwtSecret'))
+        const decoded = jwt.verify(token, jwtSecret)
         //the user logging in is the token that matches
         req.user = decoded.user
         //move on to the next piece of middleware
