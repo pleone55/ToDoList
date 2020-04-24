@@ -71,3 +71,11 @@ router.post('/', [
     }
 });
 module.exports = router;
+
+//Used for testing to retrieve and delete users
+// const UserController = require('../controllers/user.controllers');
+
+// module.exports = app => {
+//     app.get('/', UserController.getUsers);
+//     app.delete('/:id', UserController.deleteUser);
+// }
