@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import TaskContext from '../context/task/TaskContext';
-import axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -35,14 +34,18 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             backgroundColor: "#F0F0F0"
         }
+    },
+    deleteIcon: {
+        "&:hover": {
+            cursor: "pointer"
+        }
     }
 }));
 
-const TaskList = (props) => {
+const TaskList = () => {
     const taskContext = useContext(TaskContext);
-    const { tasks, getTasks, loading } = taskContext;
+    const { tasks, getTasks, loading, deleteTask, setCurrent, clearCurrent } = taskContext;
     const classes = useStyles();
-    const { setCurrent, clearCurrent } = taskContext;
 
     const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
 
@@ -63,7 +66,7 @@ const TaskList = (props) => {
                 <TableHead>
                     <TableRow>
                         {tableHead.map((head, i) => (
-                            <TableCell key={`${head}${i}`} className={classes.tableCell}>
+                            <TableCell key={`${head}${i}`}>
                                 {head.name}
                             </TableCell>
                         ))}
@@ -72,7 +75,7 @@ const TaskList = (props) => {
                 <TableBody>
                     {tasks !== null && !loading ? (
                         tasks.map(task => (
-                            <TableRow className={classes.body}>
+                            <TableRow className={classes.body} key={task._id}>
                                 <TableCell component="th" scope="row" className={classes.tableCell}>
                                     {task.taskName}
                                 </TableCell>
@@ -82,11 +85,14 @@ const TaskList = (props) => {
                                         inputProps={{ 'aria-label': 'primary checkbox' }}
                                     />
                                 </TableCell>
-                                <TableCell className={classes.tableCell}><DeleteForeverIcon/></TableCell>
+                                <TableCell 
+                                    className={classes.tableCell}>
+                                        <DeleteForeverIcon onClick={() => {deleteTask(task._id); clearCurrent()}} className={classes.deleteIcon}/>
+                                </TableCell>
                             </TableRow>
                         ))
                     ) : (
-                            <h4>No Tasks to display</h4>
+                            <h4>Please Login to View Tasks</h4>
                         )
                     }
                 </TableBody>

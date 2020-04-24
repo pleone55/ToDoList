@@ -2,7 +2,10 @@ import {
     ADD_TASK,
     GET_TASKS,
     TASK_ERROR,
-    CLEAR_TASKS
+    CLEAR_TASKS,
+    SET_CURRENT,
+    CLEAR_CURRENT,
+    DELETE_TASK
 } from '../types';
 
 export default (state, action) => {
@@ -19,6 +22,12 @@ export default (state, action) => {
                 tasks: action.payload,
                 loading: false
             };
+        case DELETE_TASK:
+            return {
+                ...state,
+                tasks: state.tasks.filter(task => task._id !== action.payload),
+                loading: false
+            }
         case TASK_ERROR:
             return {
                 ...state,
@@ -31,6 +40,16 @@ export default (state, action) => {
                 error: null,
                 current: null
             };
+        case SET_CURRENT:
+            return {
+                ...state,
+                current: action.payload
+            };
+        case CLEAR_CURRENT:
+            return {
+                ...state,
+                current: null
+            }
         default:
             return state;
     }

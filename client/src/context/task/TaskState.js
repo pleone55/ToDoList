@@ -48,6 +48,16 @@ const TaskState = props => {
         }
     };
 
+    //delete task
+    const deleteTask = async(id) => {
+        try {
+            await axios.delete(`http://localhost:7000/api/tasks/${id}`);
+            dispatch({ type: DELETE_TASK, payload: id });
+        } catch (err) {
+            dispatch({ type: TASK_ERROR, payload: err.response.msg });
+        }
+    };
+
     //Clear Task
     const clearTask = () => {
         dispatch({ type: CLEAR_TASKS });
@@ -73,7 +83,8 @@ const TaskState = props => {
                 getTasks,
                 clearTask,
                 setCurrent,
-                clearCurrent
+                clearCurrent,
+                deleteTask
             }}
         >
             { props.children }
