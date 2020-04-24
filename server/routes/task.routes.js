@@ -18,4 +18,32 @@ router.get('/', auth, async(req, res) => {
         res.status(500).send('Server Error')
     }
 });
+
+//route to create a new task that is associated with the user logged in
+router.post('/', [auth,
+    //check that the task is filled out
+    check('taskName', 'Task is required').not().isEmpty()],
+    async(req, res) => {
+        //generate an array of errors if validation fails
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            return res.status(400).json({ errors: errors.array() });
+        }
+        //pass the task description and if completed to the body
+        const { taskName, completed } = req.body;
+        //create a new task object associated to the user logged in
+        try {
+            const newTask = new Task({
+                taskName,
+                completed,
+                user: req.user.id
+            });
+            //after passing validation save new task to the user
+            const task = await newTask.save();
+            res.json(task);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('Server Error');
+        }
+});
 module.exports = router;
