@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useContext, useEffect } from 'react';
+import TaskContext from '../context/task/TaskContext';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -12,7 +13,7 @@ import AddIcon from '@material-ui/icons/Add';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import SmallAddButton from './layout/SmallAddButton';
+import SmallAddButton from '../layout/SmallAddButton';
 import { FormControl } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,25 +48,41 @@ const useStyles = makeStyles((theme) => ({
 const AddTask = () => {
     const classes = useStyles();
     const[open, setOpen] = useState(false);
-    const[taskName, setTaskName] = useState("");
-    const [errors, setErrors] = useState([]);
+    const taskContext = useContext(TaskContext);
+    const { addTask, current, clearCurrent } = taskContext;
+    const[task, setTask] = useState({
+        taskName: '',
+        completed: false
+    });
+
+    useEffect(() => {
+        if(current !== null){
+            setTask(current);
+        } else {
+            setTask({
+                taskName: '',
+                completed: false
+            });
+        }
+    }, [taskContext, current]);
+
+    const { taskName, completed } = task;
+
+    //set the new task created
+    const onChange = event => setTask({ ...task, [event.target.name]: event.target.value });
 
     const handleSubmit = event => {
         event.preventDefault();
-        axios.post("http://localhost:7000/api/tasks", {
-            taskName
-        })
-            .then(response => console.log(response))
-            .catch(err => {
-                const errResponse = err.response.data.errors;
-                const errArr = [];
-                for(const key of Object.keys(errResponse)){
-                    errArr.push(errResponse[key].message)
-                }
-
-                setErrors(errArr);
-            });
+        if(current === null){
+            addTask(task);
+        }
+        clearAll();
     };
+
+    //clear the field
+    const clearAll = () => {
+        clearCurrent();
+    }
 
     const handleOpen = () => {
         setOpen(true);
@@ -84,7 +101,6 @@ const AddTask = () => {
                 fullWidth
                 className={classes.dialog}
             >
-                {errors.map((err, i) => <p key={i}>{err}</p>)}
                 <DialogTitle id="form-dialog-title">Add New Task</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -93,12 +109,14 @@ const AddTask = () => {
                     <form className={classes.form} onSubmit={handleSubmit}>
                         <FormControl className={classes.formControl}>
                             <TextField
+                                name="taskName"
+                                value={taskName}
                                 autoFocus
                                 margin="dense"
                                 id="name"
                                 label="Add Task"
                                 type="text"
-                                onChange={event => {setTaskName(event.target.value)}}
+                                onChange={onChange}
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
@@ -109,7 +127,7 @@ const AddTask = () => {
                             />
                         </FormControl>
                         <DialogActions>
-                            <SmallAddButton />
+                            <SmallAddButton onClick={handleClose}/>
                         </DialogActions>
                     </form>
                 </DialogContent>

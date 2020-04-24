@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import TaskContext from '../context/task/TaskContext';
 import axios from 'axios';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -39,9 +41,20 @@ const useStyles = makeStyles((theme) => ({
 const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
 
 const TaskList = props => {
-    const { id } = props;
-    const { completed } = props;
     const classes = useStyles();
+    const { id } = props;
+    const [completed, setCompleted] = useState(false);
+    const taskContext = useContext(TaskContext);
+    const { tasks, getTasks, loading } = taskContext;
+
+    useEffect(() => {
+        getTasks();
+        //eslint-disable-next-line
+    }, []);
+
+    if(tasks !== null && tasks.length === 0 && !loading){
+        return <h4>Please add a task to complete</h4>
+    }
 
     const handleChecked = event => {
         axios.put("http://localhost:7000/api/tasks/" + id, {
@@ -69,7 +82,7 @@ const TaskList = props => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                    {props.task.map((task, i) => (
+                    {tasks.map((task, i) => (
                         <TableRow key={i} className={classes.body}>
                             <TableCell component="th" scope="row" className={classes.tableCell}>
                                 {task.taskName}
@@ -81,7 +94,7 @@ const TaskList = props => {
                                     inputProps={{ 'aria-label': 'primary checkbox' }}
                                 />
                             </TableCell>
-                            <TableCell className={classes.tableCell}><button onClick={() => handleDelete(task._id)}><DeleteForeverIcon/></button></TableCell>
+                            <TableCell className={classes.tableCell}><DeleteForeverIcon onClick={() => handleDelete(task._id)}/></TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
