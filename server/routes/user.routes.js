@@ -52,7 +52,7 @@ router.post('/', [
 
         //sign to generate the token
         //generate secret key
-        const jwtSecret = "$supersecret"
+        const jwtSecret = "superSecret"
         jwt.sign(
             payload,
             jwtSecret,
@@ -76,6 +76,6 @@ module.exports = router;
 // const UserController = require('../controllers/user.controllers');
 
 // module.exports = app => {
-//     app.get('/', UserController.getUsers);
-//     app.delete('/:id', UserController.deleteUser);
+//     app.get('/api/users', UserController.getUsers);
+//     app.delete('/api/users/:id', UserController.deleteUser);
 // }

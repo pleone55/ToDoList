@@ -77,6 +77,7 @@ const AddTask = () => {
             addTask(task);
         }
         clearAll();
+        handleClose();
     };
 
     //clear the field

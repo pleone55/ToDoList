@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import TaskContext from '../context/task/TaskContext';
 import axios from 'axios';
 
@@ -38,22 +38,25 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const TaskList = (props) => {
-    const taskContext = useContext(TaskContext);
-    const { tasks, getTasks, loading } = taskContext;
+const TaskItem = ({ task }) => {
     const classes = useStyles();
+    const taskContext = useContext(TaskContext);
     const { setCurrent, clearCurrent } = taskContext;
+
+    const {_id, taskName, completed} = task;
 
     const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
 
-    useEffect(() => {
-        getTasks();
-        //eslint-disable-next-line
-    }, []);
+    // const handleChecked = event => {
+    //     axios.put("http://localhost:7000/api/tasks/" + id, {
+    //         completed
+    //     })
+    //         .then(response => console.log(response));
+    // };
 
-    if(tasks !== null && tasks.length === 0 && !loading){
-        return <h4>Please add a task to complete</h4>
-    }
+    // const handleDelete = taskId => {
+    //     axios.delete("http://localhost:7000/api/tasks/" + taskId)
+    // }
 
     return (
         <>
@@ -70,30 +73,22 @@ const TaskList = (props) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {tasks !== null && !loading ? (
-                        tasks.map(task => (
-                            <TableRow className={classes.body}>
-                                <TableCell component="th" scope="row" className={classes.tableCell}>
-                                    {task.taskName}
-                                </TableCell>
-                                <TableCell className={classes.tableCell}>
-                                    <Checkbox
-                                        completed={task.completed}
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}
-                                    />
-                                </TableCell>
-                                <TableCell className={classes.tableCell}><DeleteForeverIcon/></TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                            <h4>No Tasks to display</h4>
-                        )
-                    }
+                    <TableRow className={classes.body}>
+                        <TableCell component="th" scope="row" className={classes.tableCell}>
+                            {taskName}
+                        </TableCell>
+                        <TableCell className={classes.tableCell}>
+                            <Checkbox
+                                completed={completed}
+                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                            />
+                        </TableCell>
+                        <TableCell className={classes.tableCell}><DeleteForeverIcon/></TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </TableContainer>
     </>
-    );
-}
-
-export default TaskList;
+    )
+};
+export default TaskItem;
