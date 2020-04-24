@@ -46,4 +46,54 @@ router.post('/', [auth,
             res.status(500).send('Server Error');
         }
 });
+
+//route to update the task to determine if completed or not
+router.put('/:id', auth, async(req, res) => {
+    const { completed } = req.body;
+
+    //build task object
+    const taskFields = {};
+    if(completed) taskFields.completed = completed;
+
+    //get the task by id 
+    try {
+        let task = await Task.findById(req.params.id);
+        if(!task) return res.status(404).json({ msg: 'Task not found'});
+
+        //make sure task is associated with user
+        if(task.user.toString() !== req.user.id){
+            return res.status(401).json({ msg: 'Not authorized' });
+        }
+
+        //find by id and update
+        task = await Task.findByIdAndUpdate(req.params.id, { $set: taskFields }, { new: true });
+        res.json(task);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+//route to delete the item upon user request 
+router.delete('/:id', auth, async(req, res) => {
+    try {
+        //find task by id
+        let task = await Task.findById(req.params.id);
+
+        //if task doesnt exist
+        if(!task) return res.status(404).json({ msg: 'Task not found '});
+
+        //Make sure task is associated with user
+        if(task.user.toString() !== req.user.id){
+            return res.status(401).json({ msg: 'Not Authorized '});
+        }
+
+        //find by id and delete
+        await Task.findByIdAndRemove(req.params.id);
+        res.json({ msg: 'Task removed'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 module.exports = router;
