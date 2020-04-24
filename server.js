@@ -11,7 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 7000;
 
 require('./server/config/mongoose.config');
-require('./server/routes/task.routes')(app);
+app.use('/api/tasks', require('./server/routes/task.routes'));
+app.use('/api/users', require('./server/routes/user.routes'));
 
 app.listen(PORT, function() {
     console.log(`Now listening on port ${PORT}`)
