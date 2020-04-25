@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthContext from '../../context/auth/AuthContext';
 import AlertContext from '../../context/alert/AlertContext';
 
@@ -12,9 +12,9 @@ import { Typography } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     paperStyle: {
         width: "25rem",
-        height: "20rem",
+        height: "26rem",
         margin: "auto",
-        marginTop: "100px",
+        marginTop: "60px",
     },
     titleContainer: {
         backgroundColor: "#3f51b5",
@@ -28,20 +28,25 @@ const useStyles = makeStyles((theme) => ({
     formContainer: {
         marginTop: "20px"
     },
+    formField: {
+        marginBottom: "5px"
+    }
 }));
 
-const Login = props => {
+const Register = props => {
     const authContext = useContext(AuthContext);
-    const { loginUser, error, clearErrors, isAuthenticated } = authContext;
+    const { registerUser, error, clearErrors, isAuthenticated } = authContext;
+
     const alertContext = useContext(AlertContext);
     const { setAlert } = alertContext;
+
     const classes = useStyles();
 
     useEffect(() => {
         if(isAuthenticated){
-            props.history.push("/");
+            props.history.push('/');
         }
-        if(error === 'Invalid credentials'){
+        if(error === 'User already exists'){
             setAlert(error, 'error');
             clearErrors();
         }
@@ -49,21 +54,25 @@ const Login = props => {
     }, [error, isAuthenticated, props.history]);
 
     const [user, setUser] = useState({
+        name: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
     });
 
-    const { email, password } = user;
+    const { name, email, password, confirmPassword } = user;
 
-    //set the user logging in 
     const onChange = event => setUser({ ...user, [event.target.name]: event.target.value });
 
     const onSubmit = event => {
         event.preventDefault();
-        if(email === '' || password === ''){
-            setAlert('Please fill in all fields', 'error');
+        if(name === '' || email === '' || password === ''){
+            setAlert('Please fill out each field appropiately', 'error')
+        } else if(confirmPassword !== password){
+            setAlert('Passwords do not match', 'error');
         } else {
-            loginUser({
+            registerUser({
+                name,
                 email,
                 password
             });
@@ -73,13 +82,24 @@ const Login = props => {
     return (
         <Paper className={classes.paperStyle} elevation={3}>
             <div className={classes.titleContainer}>
-                <Typography className={classes.title} align="center" variant="h4">Login</Typography>
+                <Typography className={classes.title} align="center" variant="h4">Register</Typography>
             </div>
             <form onSubmit={onSubmit} className={classes.formContainer}>
-                <Grid container justify="center" spacing={5} className={classes.gridContainer}>
+                <Grid container justify="center" spacing={2} className={classes.gridContainer}>
                     <Grid item>
                         <TextField 
-                            label="Username" 
+                            label="Name" 
+                            name="name" 
+                            type="text"
+                            value={name}
+                            onChange={onChange}
+                            fullWidth
+                            autoFocus
+                        />
+                    </Grid>
+                    <Grid item className={classes.formField}>
+                        <TextField 
+                            label="Email" 
                             name="email" 
                             type="email"
                             value={email}
@@ -89,22 +109,34 @@ const Login = props => {
                         />
                     </Grid>
                     <Grid container justify="center">
-                        <Grid item>
+                        <Grid item className={classes.formField}>
                             <TextField 
-                                name="password" 
                                 label="Password" 
+                                name="password"
                                 type="password" 
                                 value={password}
                                 onChange={onChange}
                                 fullWidth />
                         </Grid>
                     </Grid>
+                    <Grid container justify="center">
+                        <Grid item className={classes.formField}>
+                            <TextField 
+                                label="Confirm Password"
+                                name="confirmPassword"
+                                type="password" 
+                                value={confirmPassword}
+                                onChange={onChange}
+                                fullWidth />
+                        </Grid>
+                    </Grid>
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '50px' }}>
-                    <Button type="submit" variant="outlined" color="primary" style={{ textTransform: "none" }}>Login</Button>
+                    <Button type="submit" variant="outlined" color="primary" style={{ textTransform: "none" }}>Register</Button>
                 </Grid>
             </form>
         </Paper>
-    )
+    );
 };
-export default Login;
+
+export default Register;

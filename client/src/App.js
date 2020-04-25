@@ -4,6 +4,7 @@ import Navbar from './layout/Navbar';
 import Home from './pages/Home';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import Alerts from './layout/Alerts';
 
 import TaskState from './context/task/TaskState';
@@ -29,6 +30,7 @@ function App() {
                   <Switch>
                     <PrivateRoute exact path='/' component={Home} />
                     <Route exact path='/login' component={Login} />
+                    <Route exact path='/register' component={Register} />
                   </Switch>
                 </div>
             </>

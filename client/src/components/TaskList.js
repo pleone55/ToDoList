@@ -3,6 +3,7 @@ import TaskContext from '../context/task/TaskContext';
 import AlertContext from '../context/alert/AlertContext';
 
 import Spinner from '../layout/Spinner';
+import Moment from 'react-moment';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -47,12 +48,12 @@ const useStyles = makeStyles((theme) => ({
 
 const TaskList = () => {
     const taskContext = useContext(TaskContext);
-    const { tasks, getTasks, loading, deleteTask, clearCurrent, updateTask, error, clearErrors } = taskContext;
+    const { tasks, getTasks, loading, deleteTask, clearCurrent, updateTask, clearErrors } = taskContext;
     const alertContext = useContext(AlertContext);
     const { setAlert } = alertContext;
     const classes = useStyles();
 
-    const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
+    const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Created At" }, { name: "Updated At" }, { name: "Action" }];
     const [task, setTask] = useState({
         completed: false
     });
@@ -63,7 +64,7 @@ const TaskList = () => {
     }, []);
 
     if(tasks !== null && tasks.length === 0 && !loading){
-        return <h4>Please add a task to complete</h4>
+        return <h4 style={{marginLeft: "20px"}}>Please add a task to complete</h4>
     }
 
     const onChange = event => {
@@ -100,6 +101,12 @@ const TaskList = () => {
                                         inputProps={{ 'aria-label': 'primary checkbox' }}
                                         name="completed"
                                     />
+                                </TableCell>
+                                <TableCell className={classes.tableCell}>
+                                    <Moment format='MMM Do YYYY, h:mm:ss a'>{task.date}</Moment>
+                                </TableCell>
+                                <TableCell className={classes.tableCell}>
+                                    <Moment format='MMM Do YYYY, h:mm:ss a'>{task.updatedAt}</Moment>
                                 </TableCell>
                                 <TableCell 
                                     className={classes.tableCell}>

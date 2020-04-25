@@ -73,7 +73,8 @@ const AddTask = () => {
         } else {
             setTask({
                 taskName: '',
-                completed: false
+                completed: false,
+                date: new Date()
             });
         }
     }, [taskContext, current]);

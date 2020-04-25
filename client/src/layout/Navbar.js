@@ -62,7 +62,7 @@ const Navbar = () => {
                         Welcome
                     </Typography>
                     <Link 
-                        style={{ textDecoration: 'none' }} 
+                        style={{ textDecoration: 'none', color: "white" }} 
                         to="/register">
                             <Button 
                         color="inherit" 
@@ -73,7 +73,7 @@ const Navbar = () => {
                         </Button>
                     </Link><span>
                     <Link 
-                        style={{ textDecoration: 'none' }} 
+                        style={{ textDecoration: 'none', color: "white" }} 
                         to="/login">
                             <Button 
                         color="inherit" 

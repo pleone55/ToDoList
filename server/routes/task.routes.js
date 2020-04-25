@@ -30,12 +30,13 @@ router.post('/', [auth,
             return res.status(400).json({ errors: errors.array() });
         }
         //pass the task description and if completed to the body
-        const { taskName, completed } = req.body;
+        const { taskName, completed, date } = req.body;
         //create a new task object associated to the user logged in
         try {
             const newTask = new Task({
                 taskName,
                 completed,
+                date,
                 user: req.user.id
             });
             //after passing validation save new task to the user
@@ -49,11 +50,12 @@ router.post('/', [auth,
 
 //route to update the task to determine if completed or not
 router.put('/:id', auth, async(req, res) => {
-    const { completed } = req.body;
+    const { completed, date } = req.body;
 
     //build task object
     const taskFields = {};
     if(completed) taskFields.completed = completed;
+    if(date) taskFields.date = date;
 
     //get the task by id 
     try {

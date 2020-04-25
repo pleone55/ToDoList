@@ -9,7 +9,9 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    REGISTER_SUCCESS,
+    REGISTER_FAIL
 } from '../types';
 
 const AuthState = props => {
@@ -63,6 +65,22 @@ const AuthState = props => {
         }
     };
 
+    const registerUser = async(formData) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        try {
+            const res = await axios.post('http://localhost:7000/api/users', formData, config);
+            dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+            //load user after successful register
+            loadUser();
+        } catch (err) {
+            dispatch({ type: REGISTER_FAIL, payload: err.response.data.msg });
+        }
+    }
+
     //logout user
     const logout = () => dispatch({ type: LOGOUT });
 
@@ -80,7 +98,8 @@ const AuthState = props => {
                 loadUser,
                 loginUser,
                 logout,
-                clearErrors
+                clearErrors,
+                registerUser
             }}
         >
             { props.children }

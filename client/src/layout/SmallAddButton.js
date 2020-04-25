@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
     },
     AddTask: {
-        left: "90%",
+        left: "89%",
         marginLeft: "250px"
     }
 }));
