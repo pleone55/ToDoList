@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import TaskContext from '../context/task/TaskContext';
 
+import Spinner from '../layout/Spinner';
+
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -18,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
     },
     tableContainer: {
-        width: "80%",
+        width: "75%",
         margin: "auto",
         marginTop: "10px",
     },
@@ -44,10 +46,13 @@ const useStyles = makeStyles((theme) => ({
 
 const TaskList = () => {
     const taskContext = useContext(TaskContext);
-    const { tasks, getTasks, loading, deleteTask, setCurrent, clearCurrent } = taskContext;
+    const { tasks, getTasks, loading, deleteTask, clearCurrent, updateTask } = taskContext;
     const classes = useStyles();
 
     const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
+    const [task, setTask] = useState({
+        completed: false
+    });
 
     useEffect(() => {
         getTasks();
@@ -56,6 +61,10 @@ const TaskList = () => {
 
     if(tasks !== null && tasks.length === 0 && !loading){
         return <h4>Please add a task to complete</h4>
+    }
+
+    const onChange = event => {
+        setTask({ ...task, [event.target.name]: event.target.value });
     }
 
     return (
@@ -81,8 +90,11 @@ const TaskList = () => {
                                 </TableCell>
                                 <TableCell className={classes.tableCell}>
                                     <Checkbox
-                                        completed={task.completed}
+                                        checked={task.completed}
+                                        onClick={() => {task.completed = true; updateTask(task)}}
+                                        onChange={onChange}
                                         inputProps={{ 'aria-label': 'primary checkbox' }}
+                                        name="completed"
                                     />
                                 </TableCell>
                                 <TableCell 
@@ -92,7 +104,10 @@ const TaskList = () => {
                             </TableRow>
                         ))
                     ) : (
-                            <h4>Please Login to View Tasks</h4>
+                            <>
+                                <h4 style={{margin: "auto"}}>Please Login to View Tasks</h4>
+                                <Spinner />
+                            </>
                         )
                     }
                 </TableBody>

@@ -5,7 +5,8 @@ import {
     CLEAR_TASKS,
     SET_CURRENT,
     CLEAR_CURRENT,
-    DELETE_TASK
+    DELETE_TASK,
+    UPDATE_TASK
 } from '../types';
 
 export default (state, action) => {
@@ -27,7 +28,15 @@ export default (state, action) => {
                 ...state,
                 tasks: state.tasks.filter(task => task._id !== action.payload),
                 loading: false
-            }
+            };
+        case UPDATE_TASK:
+            return {
+                ...state,
+                //for each task map through the array of tasks and find the matching payload id to update
+                //else return the task as is
+                tasks: state.tasks.map(task => task._id === action.payload._id ? action.payload : task),
+                loading: false,
+            };
         case TASK_ERROR:
             return {
                 ...state,

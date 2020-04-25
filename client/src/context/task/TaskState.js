@@ -58,8 +58,23 @@ const TaskState = props => {
         }
     };
 
+    //update task
+    const updateTask = async(task) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        try {
+            const res = await axios.put(`http://localhost:7000/api/tasks/${task._id}`, task, config);
+            dispatch({ type: UPDATE_TASK, payload: res.data });
+        } catch (err) {
+            dispatch({ type: TASK_ERROR, payload: err.response});
+        }
+    }
+
     //Clear Task
-    const clearTask = () => {
+    const clearTasks = () => {
         dispatch({ type: CLEAR_TASKS });
     };
 
@@ -81,10 +96,11 @@ const TaskState = props => {
                 error: state.error,
                 addTask,
                 getTasks,
-                clearTask,
+                clearTasks,
                 setCurrent,
                 clearCurrent,
-                deleteTask
+                deleteTask,
+                updateTask
             }}
         >
             { props.children }

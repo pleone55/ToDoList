@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         },
         position: "absolute",
         top: "85%",
-        left: "90%"
+        left: "93%"
     },
     extendedIcon: {
         marginRight: theme.spacing(1),
