@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import TaskContext from '../context/task/TaskContext';
+import AlertContext from '../context/alert/AlertContext';
 
 import Spinner from '../layout/Spinner';
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         marginTop: "30px",
-        marginLeft: "130px"
+        marginLeft: "160px"
     },
     tableCell: {
         borderBottom: "none",
@@ -46,7 +47,9 @@ const useStyles = makeStyles((theme) => ({
 
 const TaskList = () => {
     const taskContext = useContext(TaskContext);
-    const { tasks, getTasks, loading, deleteTask, clearCurrent, updateTask } = taskContext;
+    const { tasks, getTasks, loading, deleteTask, clearCurrent, updateTask, error, clearErrors } = taskContext;
+    const alertContext = useContext(AlertContext);
+    const { setAlert } = alertContext;
     const classes = useStyles();
 
     const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Action" }];
@@ -91,7 +94,8 @@ const TaskList = () => {
                                 <TableCell className={classes.tableCell}>
                                     <Checkbox
                                         checked={task.completed}
-                                        onClick={() => {task.completed = true; updateTask(task)}}
+                                        onClick={() => {task.completed = true; updateTask(task); setAlert('You have successfully completed your task', 'success');
+                                        clearErrors();}}
                                         onChange={onChange}
                                         inputProps={{ 'aria-label': 'primary checkbox' }}
                                         name="completed"

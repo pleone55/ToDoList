@@ -10,7 +10,8 @@ import {
     UPDATE_TASK,
     DELETE_TASK,
     GET_TASKS,
-    CLEAR_TASKS
+    CLEAR_TASKS,
+    CLEAR_ERRORS
 } from '../types';
 
 const TaskState = props => {
@@ -88,6 +89,9 @@ const TaskState = props => {
         dispatch({ type: CLEAR_CURRENT });
     };
 
+    //clear errors
+    const clearErrors = () => dispatch({ type: CLEAR_ERRORS });
+
     return (
         <TaskContext.Provider
             value={{
@@ -100,7 +104,8 @@ const TaskState = props => {
                 setCurrent,
                 clearCurrent,
                 deleteTask,
-                updateTask
+                updateTask,
+                clearErrors
             }}
         >
             { props.children }

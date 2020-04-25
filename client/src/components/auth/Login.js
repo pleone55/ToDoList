@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../../context/auth/AuthContext';
+import AlertContext from '../../context/alert/AlertContext';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -35,13 +36,20 @@ const useStyles = makeStyles((theme) => ({
 const Login = props => {
     const authContext = useContext(AuthContext);
     const { loginUser, error, clearErrors, isAuthenticated } = authContext;
+    const alertContext = useContext(AlertContext);
+    const { setAlert } = alertContext;
     const classes = useStyles();
 
     useEffect(() => {
         if(isAuthenticated){
             props.history.push("/");
         }
-    }, [isAuthenticated, props.history]);
+        if(error === 'Invalid credentials'){
+            setAlert(error, 'error');
+            clearErrors();
+        }
+        //eslint-disable-next-line
+    }, [error, isAuthenticated, props.history]);
 
     const [user, setUser] = useState({
         email: '',
@@ -55,10 +63,14 @@ const Login = props => {
 
     const onSubmit = event => {
         event.preventDefault();
-        loginUser({
-            email,
-            password
-        });
+        if(email === '' || password === ''){
+            setAlert('Please fill in all fields', 'error');
+        } else {
+            loginUser({
+                email,
+                password
+            });
+        }
     };
 
     return (

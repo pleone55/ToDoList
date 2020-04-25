@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import TaskContext from '../context/task/TaskContext';
+import AlertContext from '../context/alert/AlertContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -49,11 +50,22 @@ const AddTask = () => {
     const classes = useStyles();
     const[open, setOpen] = useState(false);
     const taskContext = useContext(TaskContext);
-    const { addTask, current, clearCurrent } = taskContext;
+    const { addTask, current, clearCurrent, clearErrors, error } = taskContext;
+    const alertContext = useContext(AlertContext);
+    const { setAlert } = alertContext;
+
     const[task, setTask] = useState({
         taskName: '',
         completed: false
     });
+
+    useEffect(() => {
+        if(error === 'Task is required') {
+            setAlert(error, 'error');
+            clearErrors();
+        }
+        //eslint-disable-next-line
+    }, [error]);
 
     useEffect(() => {
         if(current !== null){
@@ -66,7 +78,7 @@ const AddTask = () => {
         }
     }, [taskContext, current]);
 
-    const { taskName, completed } = task;
+    const { taskName } = task;
 
     //set the new task created
     const onChange = event => setTask({ ...task, [event.target.name]: event.target.value });
@@ -75,6 +87,9 @@ const AddTask = () => {
         event.preventDefault();
         if(current === null){
             addTask(task);
+        }
+        if(taskName === '') {
+            setAlert('Please fill in all fields', 'error');
         }
         clearAll();
         handleClose();

@@ -61,8 +61,28 @@ const Navbar = () => {
                     <Typography variant="h5" className={classes.title}>
                         Welcome
                     </Typography>
-                    <Link to="/register"><Button color="inherit" disableRipple className={classes.loginButton}>Register</Button></Link><span>
-                    <Link to="/login"><Button color="inherit" disableRipple className={classes.loginButton}>Login</Button></Link>
+                    <Link 
+                        style={{ textDecoration: 'none' }} 
+                        to="/register">
+                            <Button 
+                        color="inherit" 
+                        disableRipple 
+                        className={classes.loginButton}
+                    >
+                        Register
+                        </Button>
+                    </Link><span>
+                    <Link 
+                        style={{ textDecoration: 'none' }} 
+                        to="/login">
+                            <Button 
+                        color="inherit" 
+                        disableRipple 
+                        className={classes.loginButton}
+                    >
+                        Login
+                        </Button>
+                    </Link>
                     </span>
                 </Toolbar>
             </AppBar>
