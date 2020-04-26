@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import TaskContext from '../context/task/TaskContext';
 import AlertContext from '../context/alert/AlertContext';
+import { Link } from 'react-router-dom';
 
 import Spinner from '../layout/Spinner';
 import Moment from 'react-moment';
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
         width: "75%",
         margin: "auto",
         marginTop: "10px",
+        marginBottom: "10px"
     },
     title: {
         marginTop: "30px",
@@ -43,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             cursor: "pointer"
         }
+    },
+    completedTask: {
+        marginLeft: "165px",
     }
 }));
 
@@ -88,6 +93,7 @@ const TaskList = () => {
                 <TableBody>
                     {tasks !== null && !loading ? (
                         tasks.map(task => (
+                            task.completed !== true ?
                             <TableRow className={classes.body} key={task._id}>
                                 <TableCell component="th" scope="row" className={classes.tableCell}>
                                     {task.taskName}
@@ -113,6 +119,7 @@ const TaskList = () => {
                                         <DeleteForeverIcon onClick={() => {deleteTask(task._id); clearCurrent()}} className={classes.deleteIcon}/>
                                 </TableCell>
                             </TableRow>
+                            : " "
                         ))
                     ) : (
                             <>
@@ -124,6 +131,7 @@ const TaskList = () => {
                 </TableBody>
             </Table>
         </TableContainer>
+        <Link to='/completed' className={classes.completedTask}>View Completed Tasks</Link>
     </>
     );
 }

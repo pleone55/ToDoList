@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Navbar from './layout/Navbar';
 import Home from './pages/Home';
+import CompletedTask from './components/CompletedTask';
 import PrivateRoute from './components/routing/PrivateRoute';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -29,6 +30,7 @@ function App() {
                   <Alerts />
                   <Switch>
                     <PrivateRoute exact path='/' component={Home} />
+                    <PrivateRoute exact path='/completed' component={CompletedTask} />
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/register' component={Register} />
                   </Switch>
