@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import TaskContext from '../context/task/TaskContext';
-import AlertContext from '../context/alert/AlertContext';
+import React, { useContext, useEffect } from 'react';
+import TaskContext from '../../context/task/TaskContext';
+import AlertContext from '../../context/alert/AlertContext';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import Moment from 'react-moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -58,7 +58,13 @@ const CompletedTask = () => {
     const { setAlert } = alertContext;
     const classes = useStyles();
 
-    const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Created At" }, { name: "Updated At" }, { name: "Action" }];
+    const tableHead = [
+        { name: "Task" }, 
+        { name: "Completed" }, 
+        { name: "Created At" }, 
+        { name: "Completed At" }, 
+        { name: "Action" }
+    ];
 
     useEffect(() => {
         getTasks();

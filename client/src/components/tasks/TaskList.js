@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import TaskContext from '../context/task/TaskContext';
-import AlertContext from '../context/alert/AlertContext';
+import TaskContext from '../../context/task/TaskContext';
+import AlertContext from '../../context/alert/AlertContext';
 import { Link } from 'react-router-dom';
 
-import Spinner from '../layout/Spinner';
+import Spinner from '../../layout/Spinner';
 import Moment from 'react-moment';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
     completedTask: {
         marginLeft: "165px",
-    }
+    },
 }));
 
 const TaskList = () => {
@@ -58,10 +58,17 @@ const TaskList = () => {
     const { setAlert } = alertContext;
     const classes = useStyles();
 
-    const tableHead = [{ name: "Task" }, { name: "Completed" }, { name: "Created At" }, { name: "Updated At" }, { name: "Action" }];
     const [task, setTask] = useState({
         completed: false
     });
+
+    
+    const tableHead = [
+        { name: "Task" }, 
+        { name: "Completed" }, 
+        { name: "Created At" }, 
+        { name: "Action" }
+    ];
 
     useEffect(() => {
         getTasks();
@@ -74,7 +81,7 @@ const TaskList = () => {
 
     const onChange = event => {
         setTask({ ...task, [event.target.name]: event.target.value });
-    }
+    };
 
     return (
         <>
@@ -95,7 +102,11 @@ const TaskList = () => {
                         tasks.map(task => (
                             task.completed !== true ?
                             <TableRow className={classes.body} key={task._id}>
-                                <TableCell component="th" scope="row" className={classes.tableCell}>
+                                <TableCell 
+                                    component="th" 
+                                    scope="row" 
+                                    className={classes.tableCell}
+                                >
                                     {task.taskName}
                                 </TableCell>
                                 <TableCell className={classes.tableCell}>
@@ -110,9 +121,6 @@ const TaskList = () => {
                                 </TableCell>
                                 <TableCell className={classes.tableCell}>
                                     <Moment format='MMM Do YYYY, h:mm:ss a'>{task.date}</Moment>
-                                </TableCell>
-                                <TableCell className={classes.tableCell}>
-                                    <Moment format='MMM Do YYYY, h:mm:ss a'>{task.updatedAt}</Moment>
                                 </TableCell>
                                 <TableCell 
                                     className={classes.tableCell}>

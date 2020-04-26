@@ -1,6 +1,6 @@
 import React from 'react';
-import TaskList from '../components/TaskList';
-import AddTask from '../components/AddTask';
+import TaskList from '../components/tasks/TaskList';
+import AddTask from '../components/tasks/AddTask';
 
 const Home = () => {
     return (

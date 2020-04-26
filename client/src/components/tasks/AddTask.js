@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import TaskContext from '../context/task/TaskContext';
-import AlertContext from '../context/alert/AlertContext';
+import TaskContext from '../../context/task/TaskContext';
+import AlertContext from '../../context/alert/AlertContext';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
-import SmallAddButton from '../layout/SmallAddButton';
+import SmallAddButton from '../../layout/SmallAddButton';
 import { FormControl } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,9 +22,12 @@ const useStyles = makeStyles((theme) => ({
         '& > *': {
             margin: theme.spacing(1),
         },
-        position: "absolute",
-        top: "85%",
-        left: "93%"
+        margin: 0,
+        top: 'auto',
+        right: 20,
+        bottom: 20,
+        left: 'auto',
+        position: 'fixed',
     },
     extendedIcon: {
         marginRight: theme.spacing(1),
